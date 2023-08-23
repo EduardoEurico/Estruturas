@@ -1,0 +1,118 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+////Declaração da estrutura do nó////
+
+
+struct no{
+
+
+    int numero;
+    struct no *anterior;
+    struct no *proximo;
+};
+
+////Declaração de Variaveis////
+
+struct no *cabeca=NULL;
+
+///Função inserior nó na lista///
+
+void inserir(int numero){
+    //alocação da memoria//
+
+    struct no *novoNo =(struct no*) malloc(sizeof(struct no));
+    novoNo-> numero=numero;
+    novoNo->anterior=NULL;
+    novoNo->proximo=NULL;
+
+    if (cabeca==NULL){
+
+        //caso facil, a lista esta vazia//
+        cabeca = novoNo;
+    }else {
+
+        //Caso dificil, a lista NÂO está vazia//
+        struct no *ponteiro=cabeca;
+
+
+        //Procura o ultimo nó da lista
+        while (ponteiro->proximo!=NULL){
+            ponteiro=ponteiro->proximo;
+        }
+        ///Executa os apontamenots///
+        ponteiro->proximo=novoNo;
+        novoNo->anterior=ponteiro;
+
+    }
+
+
+}
+
+////Funçaõ que imprimi a lista////
+
+void imprimir(){
+    struct no *ponteiro = cabeca;
+    while (ponteiro!=NULL){
+        printf("%d\n",ponteiro->numero);
+        ponteiro = ponteiro->proximo;
+    }
+
+}
+
+/////Função que remove nó da lista/////
+void remover(int numero){
+
+    struct no* ponteiro=cabeca;
+
+    while(ponteiro!=NULL){
+        if (ponteiro->numero==numero){
+            if (ponteiro->anterior==NULL){
+                //Excluir primeiro nó da lista//
+                cabeca=cabeca->proximo;
+                if (cabeca!=NULL){
+                    cabeca->anterior=NULL;
+                }
+                    free(ponteiro);
+                    ponteiro=cabeca;
+                }else if (ponteiro->proximo==NULL){
+                //Excluir o ultimo nó da lista//
+                    struct no *temp=ponteiro;
+                    ponteiro=ponteiro->anterior;
+                    ponteiro->proximo=NULL;
+                    free(temp);
+            }else{
+                //Excluir um nó no meio da lista//
+                struct no *temp=ponteiro;
+                ponteiro=ponteiro->anterior;
+                temp->anterior->proximo=temp->proximo;
+                temp->proximo->anterior=temp->anterior;
+                free(temp);
+        }
+        }
+    }
+    if(ponteiro!=NULL){
+        ponteiro=ponteiro->proximo;
+    }
+}
+
+////Funçaõ princuipal de execuçaõ do programa////
+int main (){
+    remover(1);
+    imprimir();
+    inserir(1);
+    remover(1);
+    imprimir();
+
+    inserir(1);
+    inserir(2);
+    inserir(3);
+    inserir(4);
+    inserir(5);
+    remover(1);
+    remover(5);
+    remover(3);
+    imprimir();
+
+}
+
